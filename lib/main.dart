@@ -26,7 +26,7 @@ class ExampleVolumeStream extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         body: Center(
           child: FutureBuilder(
-            future: _twitter.tweetsService.connectFilteredStream(),
+            future: _twitter.tweetsService.connectVolumeStream(),
             builder: (_, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
