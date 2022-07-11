@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
-final TwitterApi _twitter = TwitterApi(bearerToken: 'YOUR_TOKEN_HERE');
-
 void main() {
   runApp(const MyApp());
 }
@@ -14,19 +12,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Example Volume Stream',
-      home: ExampleVolumeStream(),
+      home: VolumeStreamView(),
     );
   }
 }
 
-class ExampleVolumeStream extends StatelessWidget {
-  const ExampleVolumeStream({Key? key}) : super(key: key);
+class VolumeStreamView extends StatefulWidget {
+  const VolumeStreamView({Key? key}) : super(key: key);
+
+  @override
+  State<VolumeStreamView> createState() => _VolumeStreamViewState();
+}
+
+class _VolumeStreamViewState extends State<VolumeStreamView> {
+  final TwitterApi _twitter = TwitterApi(bearerToken: 'YOUR_TOKEN_HERE');
+
+  late Future<Stream<TwitterResponse<TweetData, void>>> _stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 15分間に50回のリクエストのみが許可されるため、
+    // あらかじめStreamを取得しておきます。
+    _stream = _twitter.tweetsService.connectVolumeStream();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Center(
           child: FutureBuilder(
-            future: _twitter.tweetsService.connectVolumeStream(),
+            future: _stream,
             builder: (_, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
