@@ -27,7 +27,7 @@ class VolumeStreamView extends StatefulWidget {
 class _VolumeStreamViewState extends State<VolumeStreamView> {
   final TwitterApi _twitter = TwitterApi(bearerToken: 'YOUR_TOKEN_HERE');
 
-  late Future<Stream<TwitterResponse<TweetData, void>>> _stream;
+  late Future<TwitterStreamResponse<TwitterResponse<TweetData, void>>> _stream;
 
   @override
   void initState() {
@@ -48,8 +48,10 @@ class _VolumeStreamViewState extends State<VolumeStreamView> {
                 return const CircularProgressIndicator();
               }
 
+              final stream = snapshot.data.stream;
+
               return StreamBuilder(
-                stream: snapshot.data,
+                stream: stream,
                 builder: (_, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();
