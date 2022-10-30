@@ -35,7 +35,7 @@ class _VolumeStreamViewState extends State<VolumeStreamView> {
 
     // 15分間に50回のリクエストのみが許可されるため、
     // あらかじめStreamを取得しておきます。
-    _stream = _twitter.tweetsService.connectVolumeStream();
+    _stream = _twitter.tweets.connectSampleStream();
   }
 
   @override
